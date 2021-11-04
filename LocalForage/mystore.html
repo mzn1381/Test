@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="localforage.min.js"></script>
+</head>
+<script>
+    function AddCurrentSearch() {
+        var searchParam = document.getElementById("searchparam");
+        var imgs = document.getElementById("imgs");
+        var searched = {};
+        searched.searchname = searchParam.value;
+        searched.imgs = imgs.checked;
+        localforage.length().then((result) => {
+
+            localforage.setItem(result, searched);
+            UpdateSelectedListSearched();
+            searchParam.value = " ";
+            imgs.checked = false;
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+
+    function UpdateSelectedListSearched() {
+        var searchList = document.getElementById("savedsearch");
+        searchList.innerHTML = "";
+        var opt = document.createElement("option");
+        opt.setAttribute("selected", "selected");
+        opt.setAttribute("value", "0");
+        opt.appendChild(document.createTextNode("pleaseEntredValue"));
+        searchList.appendChild(opt);
+        localforage.length().then(num => {
+            console.log(num);
+            if (num >= 0) {
+                localforage.iterate(function(value, key, iterationNumber) {
+                    // console.log(value);
+                    // console.log(key);
+                    var optt = document.createElement("option");
+                    optt.setAttribute("value", key);
+                    optt.appendChild(document.createTextNode(value.searchname));
+                    searchList.appendChild(optt);
+                });
+
+            }
+        });
+
+    }
+
+
+    function ShowSearch() {
+        var selectedIndex = document.getElementById("savedsearch").selectedIndex;
+        if (selectedIndex > 0) {
+            var searchParam = document.getElementById("searchparam");
+            var imgs = document.getElementById("imgs");
+            var key = document.getElementById("savedsearch").value;
+            localforage.getItem(key).then(function(val) {
+                searchParam.value = val.searchname;
+                imgs.checked = val.imgs;
+            });
+        } else {
+            searchParam.value = " ";
+            imgs.checked = false;
+        }
+    }
+
+    function ShowOrHide() {
+        debugger;
+        alert("Is In");
+        localforage.clear();
+        var searchList = document.getElementById("previoussearch");
+        var t = searchList.style.display;
+        if (searchList.style.display == "none") {
+            searchList.style.display = "block";
+        } else if (searchList.style.display == "block") {
+            searchList.style.display = "none";
+        }
+
+    }
+
+    window.addEventListener("load", e => {
+        console.log(localforage);
+
+        UpdateSelectedListSearched();
+        document.getElementById("savedsearch").addEventListener("change", ShowSearch);
+        var btnsSaveSearch = document.getElementById("btnsubmit").addEventListener("click", ev => {
+            ev.preventDefault();
+            AddCurrentSearch();
+        });
+        var btnclear = document.getElementById("btnclear").addEventListener("click", evt => {
+            evt.preventDefault();
+            ShowOrHide();
+        });
+    });
+</script>
+
+<body>
+    <h1>TopLearn.Com - Saving and restoring form content</h1>
+    <p></p>
+    <form action="" id="myform">
+        <fieldset>
+            <legend>Enter search parameters:</legend>
+            <div id="previoussearch" style="display: block;">
+                <label for="savedsearch">Use a previous search: </label>
+                <!-- This menu is generated based on the local DB content -->
+                <select id="savedsearch">
+                        <option value="header" selected>-- Please choose a previous search --</option>
+                    </select>
+                <!-- <button id="btnsavedsearch">Saved Search</button> -->
+            </div>
+            <div>
+                <label for="searchparam">Search for:
+                        <input size="40" type="search" name="searchparam" id="searchparam" list="prevterms">
+                    </label>
+            </div>
+            <div>
+                <label for="imgs">
+                        <input type="checkbox" name="imgs" id="imgs"> Include images
+                    </label>
+            </div>
+        </fieldset>
+    </form>
+    <button id="btnsubmit">Search</button>
+    <button id="btnclear">Clear Searches</button>
+</body>
+
+</html>

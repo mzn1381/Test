@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>TopLearn.Com</title>
+    <!-- <link rel="stylesheet" href="/styles.css"> -->
+    <script src="localforage.min.js"></script>
+    <script>
+        function populateprevlist() {
+            let elem = document.getElementById("savedsearch");
+            elem.innerHTML = "";
+
+            let opt = document.createElement("option");
+            opt.setAttribute("selected", "selected");
+            opt.appendChild(document.createTextNode("-- Please choose a previous search --"));
+            elem.appendChild(opt);
+
+            localforage.iterate(function(value, key, iterationNumber) {
+                opt = document.createElement("option");
+                opt.setAttribute("value", key);
+                opt.appendChild(document.createTextNode(value.searchterm));
+                elem.appendChild(opt);
+            });
+        }
+
+        function updatesavedsearchlist() {
+            // localforage.length().then(num => {
+            //     console.log("num:" + num);
+            populateprevlist();
+            // showorhideprevlist(num > 0);
+            // });
+        }
+
+        function selectedsavedsearch(evt) {
+            let selindex = document.getElementById("savedsearch").selectedIndex;
+
+            if (selindex > 0) {
+                let key = `search${selindex - 1}`;
+                localforage.getItem(key).then(function(val) {
+
+                    document.getElementById("searchparam").value = val.searchterm;
+                    document.getElementById("imgs").checked = val.includeimg;
+                });
+            } else {
+                document.getElementById("searchparam").val = "";
+                document.getElementById("imgs").checked = false;
+            }
+        }
+
+        function showorhideprevlist(show) {
+            elem = document.getElementById("previoussearch");
+            elem.style.display = show ? "block" : "none";
+        }
+
+        function logsearch() {
+            let searchval = document.getElementById("searchparam").value;
+            let includeimg = document.getElementById("imgs").checked;
+            console.log(`Search on '${searchval}', include images : ${includeimg}`);
+        }
+
+        function savecurrentsearch() {
+            let searchval = document.getElementById("searchparam").value;
+            let includeimg = document.getElementById("imgs").checked;
+
+            let saveddata = {};
+            saveddata.searchterm = searchval;
+            saveddata.includeimg = includeimg;
+
+            localforage.length().then((result) => {
+                // console.log(localforage);
+                let searchterm = `search${result}`;
+                localforage.setItem(searchterm, saveddata).then(res => {
+                    console.log("data stored : ", res);
+                    updatesavedsearchlist();
+
+                    document.getElementById("searchparam").value = "";
+                    document.getElementById("imgs").checked = false;
+                });
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
+        window.addEventListener("load", function(e) {
+            updatesavedsearchlist();
+            document.getElementById("btnsubmit").addEventListener("click", evt => {
+                logsearch();
+                savecurrentsearch();
+                evt.preventDefault();
+            });
+            document.getElementById("btnclear").addEventListener("click", evt => {
+                showorhideprevlist(false);
+                evt.preventDefault();
+            });
+            document.getElementById("savedsearch").addEventListener("change", selectedsavedsearch)
+        });
+    </script>
+</head>
+
+<body>
+    <h1>TopLearn.Com - Saving and restoring form content</h1>
+    <p></p>
+    <form action="" id="myform">
+        <fieldset>
+            <legend>Enter search parameters:</legend>
+            <div id="previoussearch">
+                <label for="savedsearch">Use a previous search: </label>
+                <!-- This menu is generated based on the local DB content -->
+                <select id="savedsearch">
+                        <option value="header" selected>-- Please choose a previous search --</option>
+                    </select>
+                <!-- <button type="button" id="btnsavedsearch">Saved Search</button> -->
+            </div>
+            <div>
+                <label for="searchparam">Search for:
+                        <input size="40" type="search" name="searchparam" id="searchparam" list="prevterms">
+                    </label>
+            </div>
+            <div>
+                <label for="imgs">
+                        <input type="checkbox" name="imgs" id="imgs"> Include images
+                    </label>
+            </div>
+        </fieldset>
+    </form>
+    <button id="btnsubmit">Search</button>
+    <button id="btnclear">Clear Searches</button>
+</body>
+
+</html>

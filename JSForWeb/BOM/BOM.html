@@ -1,0 +1,42 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <button onclick="CheckCookie()">Cookie</button>
+    <button onclick="Size()">ClickMe!</button>
+    <p id="masahat"></p>
+    <button onclick="Open()">Open</button>
+    <button onclick="Close()">Close</button>
+</body>
+
+</html>
+<script type="text/javascript" src="Cookie.JS"></script>
+<script>
+    var t1 = 'mojtaba zare'
+    console.log(t1.charAt(0));
+
+
+
+    function Size() {
+        var f;
+        var masahat = document.getElementById('masahat');
+        var width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        var height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        masahat.innerHTML = "Your Width --->" + width + ",,,, Your Height --->" + height;
+    }
+
+    function Open() {
+        f = window.open("", "_blank", "width:500px;height:500px;");
+        f.document.write("Iam the best programmer and the best badmintonplayer");
+    }
+
+    function Close() {
+        f.close();
+    }
+</script>

@@ -1,0 +1,72 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="text" id="t1">
+    <input type="number" id="n1" vlaue="110" Min=5>
+    <br>
+    <form id="f1" action="http://www.apple.com">
+        <input type="button" id="i1" value="m">
+        <input type="button" name="i2" value="m2">
+        <input type="checkbox" name="" id="forza" value="forza">Forza
+        <input type="checkbox" name="" id="yonex" value="yonex">Yonex
+        <input type="checkbox" name="" id="lining" value="lining">Lining
+        <input type="submit" value="apple">
+        <br>
+        <br>
+        <br>
+        <input type="radio" name="r1" id="Forza" value="forza">Forza
+        <input type="radio" name="r1" id="Yonex" value="yonex">Yonex
+        <input type="radio" name="r1" id="Lining" value="lining">Lining
+        <select id="s1">
+            <option value="MZ">MojtabaZare</option>
+            <option value="MN">MoeinNadery</option>
+            <option value="HC">HosseinChavoshy</option>
+            <option value="MK">MoeinKeshavarz</option>
+        </select>
+    </form>
+    <form id="f2">
+        <div>
+            <p id="p1" value="Test">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Recusandae dolore adipisci unde consequatur facere autem dolores veritatis alias itaque, ducimus tenetur commodi sint ea odio totam expedita quia deserunt quod.</p>
+            <p name="p2">salammojtaba</p>
+        </div>
+        <input type="button" value="z" id="i3">
+    </form>
+    <div id="d1">
+        <p>slanm</p>
+        <p>samalm</p>
+        <a name="mzn1" id="mzn1" value="vv">mzn1</a>
+        <a name="mzn2">mzn2</a>
+        <a id="mzn3">mzn3</a>
+    </div>
+    <div name="d2">
+        <span name="mojtaba">mojtaba</span>
+        <span name="hossein">hossein</span>
+        <span id="Moein">Moein</span>
+    </div>
+</body>
+
+</html>
+
+<script>
+    var s1 = document.getElementById('s1');
+    var text = document.getElementById('t1');
+    var form = document.getElementById('f1');
+    form.addEventListener('submit', calTor);
+
+    function calTor(listener) {
+        listener.preventDefault();
+        if (text.value === null || text.value === "") {
+            alert("لطفا مقداری را برای این فیلد وارد کنید");
+            s1.focus();
+        } else {
+            alert('همه چیز فیلد صحیح است')
+        }
+    }
+</script>

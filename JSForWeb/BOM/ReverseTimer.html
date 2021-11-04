@@ -1,0 +1,31 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p id="demo"></p>
+</body>
+
+</html>
+<script>
+    var result = document.getElementById("demo");
+    var d = new Date("2021-11-12 23:59:59").getTime();
+    var x = setInterval(function() {
+        var f = new Date().getTime();
+        var distance = d - f;
+        var day = Math.floor((distance) / (1000 * 60 * 60 * 24));
+        var hour = Math.floor((distance) / (1000 * 60 * 60));
+        var minute = Math.floor((distance) / (1000 * 60));
+        var second = Math.floor((distance) / (1000));
+        result.innerHTML = 'Day:' + day + 'Hour:' + hour + 'Min:' + minute + 'second :' + second;
+        if (distance < 0) {
+            clearInterval(x);
+            result.innerHTML = 'تمام';
+        }
+    }, 1000);
+</script>
